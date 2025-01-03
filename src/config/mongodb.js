@@ -28,3 +28,9 @@ export const GET_DB = () => {
   if (!trelloDatabaseInstance) throw new Error ('Must connect to Database first')
   return trelloDatabaseInstance
 }
+// Đóng kết nối Data khi cần
+export const CLOSE_DB = async () => {
+  console.log('Code run into function Close')
+  await mongoClientInstance.close()
+}
+

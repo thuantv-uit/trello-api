@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import express from 'express'
-import { CONNECT_DB, GET_DB } from '~/config/mongodb'
+import exitHook from 'async-exit-hook'
+import { CONNECT_DB, GET_DB, CLOSE_DB } from '~/config/mongodb'
 
 const START_SERVER = () => {
   const app = express()
@@ -16,6 +17,13 @@ const START_SERVER = () => {
   app.listen(port, hostname, () => {
     // eslint-disable-next-line no-console
     console.log(`3. Hello Thuan, Back-end Server is running successfully at Host: ${hostname} and Port :${port}`)
+  })
+  // Thực hiện các tác vụ cleanup trước khi dừng server
+  exitHook(() => {
+    console.log('4. Disconnecting from MongoDB CLoud Atlas')
+    CLOSE_DB()
+    console.log('5. Disconnected from MongoDB CLoud Atlas')
+
   })
 }
 
