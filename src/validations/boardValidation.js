@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import { StatusCodes } from 'http-status-codes'
+import ApiError from '~/utils/ApiError'
 
 // Note: Mặc định chúng ta không phải custom message ở phía BE làm gì vì để cho Front-end tự validate và custom message phía FE cho đẹp.
 // Back-end: chỉ cần Validate đảm bảo dữ liệu chuẩn xác, và trả về message mặc định từ thư viện là được.
@@ -24,9 +25,9 @@ const CreateNew = async (req, res, next) => {
     // validate dữ liệu hợp lệ thì cho request đi tiếp sang Controller
     next()
   } catch (error) {
-    res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
-      errors: new Error(error).message
-    })
+    const errorMessage = new Error(error).message
+    const customError = new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, errorMessage)
+    next(customError)
   }
 }
 export const boardValidation = {
