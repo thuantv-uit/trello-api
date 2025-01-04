@@ -7,7 +7,9 @@ import { APIs_V1 } from '~/routes/v1'
 
 const START_SERVER = () => {
   const app = express()
-
+  // Enble req.body json data
+  app.use(express.json())
+  // Use APIs V1
   app.use('/v1', APIs_V1)
 
   app.get('/', (req, res) => {
