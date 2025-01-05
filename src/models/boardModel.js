@@ -19,18 +19,21 @@ const BOARD_COLLECTION_SCHEMA = Joi.object({
   _destroy: Joi.boolean().default(false)
 })
 
+const validateBeforeCreate = async(data) => {
+  return await await BOARD_COLLECTION_SCHEMA.validateAsync(data, { abortEarly: false })
+}
+
 const createNew = async (data) => {
   try {
-    const createdBoard = await GET_DB().collection(BOARD_COLLECTION_NAME).insertOne(data)
+    const valiData = await validateBeforeCreate(data)
+    const createdBoard = await GET_DB().collection(BOARD_COLLECTION_NAME).insertOne(valiData)
     return createdBoard
   } catch (error) { throw new Error(error) }
 }
 
 const findONeById = async (id) => {
   try {
-    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({
-      _id: id
-    })
+    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({ _id: id })
     return result
   } catch (error) { throw new Error(error) }
 }
