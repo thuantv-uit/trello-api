@@ -40,7 +40,7 @@ const findONeById = async (id) => {
   try {
     // const testId = new Object(String(id))
     // console.log('testId: ', testId)
-    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({ _id: id })
+    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({ _id: new ObjectId(String(id)) })
     return result
   } catch (error) { throw new Error(error) }
 }
