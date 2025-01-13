@@ -38,7 +38,7 @@ const createNew = async (data) => {
 
 const findONeById = async (id) => {
   try {
-    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({ _id: new ObjectId(String(id)) })
+    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({ _id: new ObjectId(id) })
     return result
   } catch (error) { throw new Error(error) }
 }
@@ -54,7 +54,7 @@ const getDetails = async (id) => {
   try {
     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).aggregate([
       { $match: {
-        _id: new ObjectId(id),
+        _id: new ObjectId(String(id)),
         _destroy: false
       } },
       { $lookup: {
