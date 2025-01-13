@@ -24,22 +24,32 @@ const createNew = async (reqBody) => {
   } catch (error) { throw error }
 }
 
+// const getDetails = async (boardId) => {
+//   try {
+//     const board = await boardModel.getDetails(boardId)
+//     if (!board) {
+//       throw new ApiError(StatusCodes.NOT_FOUND, 'Board not found!')
+//     }
+//     // Deep Clone board ra một cái mới để xử lý, không ảnh hưởng tới board ban đầu, tùy mục đích về sau mà có cần clone deep hay không
+//     const resBoard = cloneDeep(board)
+//     // Đưa card về đúng Column
+//     resBoard.columns.forEach(column => {
+//       column.cards = resBoard.cards.filter(card => card.columnId.toString() === column._id.toString())
+//     })
+//     // XÓa mảng cards khỏi board ban đầu
+//     delete resBoard.cards
+
+//     return resBoard
+//   } catch (error) { throw error }
+// }
+
 const getDetails = async (boardId) => {
   try {
     const board = await boardModel.getDetails(boardId)
     if (!board) {
       throw new ApiError(StatusCodes.NOT_FOUND, 'Board not found!')
     }
-    // Deep Clone board ra một cái mới để xử lý, không ảnh hưởng tới board ban đầu, tùy mục đích về sau mà có cần clone deep hay không
-    const resBoard = cloneDeep(board)
-    // Đưa card về đúng Column
-    resBoard.columns.forEach(column => {
-      column.cards = resBoard.cards.filter(card => card.columnId.toString() === column._id.toString())
-    })
-    // XÓa mảng cards khỏi board ban đầu
-    delete resBoard.cards
-
-    return resBoard
+    return board
   } catch (error) { throw error }
 }
 
