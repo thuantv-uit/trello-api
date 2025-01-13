@@ -43,36 +43,36 @@ const findONeById = async (id) => {
   } catch (error) { throw new Error(error) }
 }
 
-const getDetails = async (id) => {
-  try {
-    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({ _id: new ObjectId(id) })
-    return result
-  } catch (error) { throw new Error(error) }
-}
-
 // const getDetails = async (id) => {
 //   try {
-//     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).aggregate([
-//       { $match: {
-//         _id: new ObjectId(String(id)),
-//         _destroy: false
-//       } },
-//       { $lookup: {
-//         from: columnModel.COLUMN_COLLECTION_NAME,
-//         localField: '_id',
-//         foreignField: 'boardId',
-//         as: 'columns'
-//       } },
-//       { $lookup: {
-//         from: cardModel.CARD_COLLECTION_NAME,
-//         localField: '_id',
-//         foreignField: 'boardId',
-//         as: 'cards'
-//       } }
-//     ]).toArray()
-//     return result[0] || null
+//     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({ _id: new ObjectId(id) })
+//     return result
 //   } catch (error) { throw new Error(error) }
 // }
+
+const getDetails = async (id) => {
+  try {
+    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).aggregate([
+      { $match: {
+        _id: new ObjectId(id),
+        _destroy: false
+      } },
+      { $lookup: {
+        from: columnModel.COLUMN_COLLECTION_NAME,
+        localField: '_id',
+        foreignField: 'boardId',
+        as: 'columns'
+      } },
+      { $lookup: {
+        from: cardModel.CARD_COLLECTION_NAME,
+        localField: '_id',
+        foreignField: 'boardId',
+        as: 'cards'
+      } }
+    ]).toArray()
+    return result[0] || null
+  } catch (error) { throw new Error(error) }
+}
 
 // Nhiệm vụ của func này là push giá trị columnId vào mảng vào cuối mảng columnOrderIds
 const pushColumnOrderIds = async (column) => {
