@@ -4,6 +4,7 @@ import { boardModel } from '~/models/boardModel'
 import ApiError from '~/utils/ApiError'
 import { StatusCodes } from 'http-status-codes'
 import { cloneDeep } from 'lodash'
+import { date } from 'joi'
 
 const createNew = async (reqBody) => {
   try {
@@ -43,17 +44,20 @@ const getDetails = async (boardId) => {
   } catch (error) { throw error }
 }
 
-// const getDetails = async (boardId) => {
-//   try {
-//     const board = await boardModel.getDetails(boardId)
-//     if (!board) {
-//       throw new ApiError(StatusCodes.NOT_FOUND, 'Board not found!')
-//     }
-//     return board
-//   } catch (error) { throw error }
-// }
+const update = async (boardId, reqBody) => {
+  try {
+    const updatData = {
+      ...reqBody,
+      updatedAt: date.now()
+    }
+    const updatedBoard = await boardModel.update(boardId, updatData)
+    return updatedBoard
+  } catch (error) { throw error }
+}
+
 
 export const boardService = {
   createNew,
-  getDetails
+  getDetails,
+  update
 }
