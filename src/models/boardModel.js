@@ -15,7 +15,7 @@ const BOARD_COLLECTION_SCHEMA = Joi.object({
   type: Joi.string().valid(BOARD_TYPES.PUBLIC, BOARD_TYPES.PRIVATE).required(),
 
   // Lưu ý các item trong mảng cardOrderIds là ObjectId nên cần thêm pattern cho chuẩn
-  columndOrderIds: Joi.array().items(
+  columnOrderIds: Joi.array().items(
     Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
   ).default([]),
 
@@ -38,7 +38,7 @@ const createNew = async (data) => {
 
 const findONeById = async (id) => {
   try {
-    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({ _id: new ObjectId(String(id)) })
+    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({ _id: new ObjectId(id) })
     return result
   } catch (error) { throw new Error(error) }
 }
@@ -54,7 +54,7 @@ const getDetails = async (id) => {
   try {
     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).aggregate([
       { $match: {
-        _id: new ObjectId(id),
+        _id: new ObjectId(String(id)),
         _destroy: false
       } },
       { $lookup: {
@@ -79,7 +79,7 @@ const pushColumnOrderIds = async (column) => {
   try {
     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOneAndUpdate(
       { _id: new ObjectId(String(column.boardId)) },
-      { $push: { columndOrderIds: new ObjectId(String(column._id)) } },
+      { $push: { columnOrderIds: new ObjectId(String(column._id)) } },
       { returnDocument: 'after' }
     )
 
