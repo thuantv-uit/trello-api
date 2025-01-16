@@ -32,6 +32,31 @@ const CreateNew = async (req, res, next) => {
     next(customError)
   }
 }
+
+const update = async (req, res, next) => {
+  // Lưu ý không require trong trường hợp Update
+  const correctCondition = Joi.object({
+    title: Joi.string().min(3).max(50).trim().strict(),
+    description: Joi.string().min(3).max(256).trim().strict(),
+    type: Joi.string().valid(BOARD_TYPES.PUBLIC, BOARD_TYPES.PRIVATE)
+  })
+
+  try {
+    // Set abortEarly: false để trường hợp có nhiều lỗi Validation thì trả về tất cả
+    // Đối với trường hợp update, cho phép Unknown để không cần đẩy một số field lên
+    await correctCondition.validateAsync(req.body, {
+      abortEarly: false,
+      allowUnknown: true
+    })
+    next()
+  } catch (error) {
+    const errorMessage = new Error(error).message
+    const customError = new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, errorMessage)
+    next(customError)
+  }
+}
+
 export const boardValidation = {
-  CreateNew
+  CreateNew,
+  update
 }
