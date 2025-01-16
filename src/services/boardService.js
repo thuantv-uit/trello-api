@@ -4,7 +4,6 @@ import { boardModel } from '~/models/boardModel'
 import ApiError from '~/utils/ApiError'
 import { StatusCodes } from 'http-status-codes'
 import { cloneDeep } from 'lodash'
-import { date } from 'joi'
 
 const createNew = async (reqBody) => {
   try {
@@ -46,11 +45,11 @@ const getDetails = async (boardId) => {
 
 const update = async (boardId, reqBody) => {
   try {
-    const updatData = {
+    const updateData = {
       ...reqBody,
-      updatedAt: date.now()
+      updatedAt: Date.now()
     }
-    const updatedBoard = await boardModel.update(boardId, updatData)
+    const updatedBoard = await boardModel.update(boardId, updateData)
     return updatedBoard
   } catch (error) { throw error }
 }
