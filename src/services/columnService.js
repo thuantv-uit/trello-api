@@ -1,6 +1,7 @@
 /* eslint-disable no-useless-catch */
 import { columnModel } from '~/models/columnModel'
 import { boardModel } from '~/models/boardModel'
+import { cardModel } from '~/models/cardModel'
 
 const createNew = async (reqBody) => {
   try {
@@ -32,7 +33,18 @@ const update = async (columnId, reqBody) => {
   } catch (error) { throw error }
 }
 
+const deleteItem = async (columnId) => {
+  try {
+    // Xóa Column
+    await columnModel.deleteOneById(columnId)
+    // Xóa toàn bộ Cards thuộc Column trên
+    await cardModel.deleteManyByColumnId(columnId)
+    return { deleteResult: 'Column and its Cards deleted successfully' }
+  } catch (error) { throw error }
+}
+
 export const columnService = {
   createNew,
-  update
+  update,
+  deleteItem
 }
