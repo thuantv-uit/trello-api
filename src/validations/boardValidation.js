@@ -58,6 +58,7 @@ const update = async (req, res, next) => {
   }
 }
 
+
 const moveCardToDifferentColumn = async (req, res, next) => {
   // Lưu ý không require trong trường hợp Update
   const correctCondition = Joi.object({
